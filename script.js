@@ -1,3 +1,4 @@
+
 let tasks = JSON.parse(localStorage.getItem('tasks')) || [];
         let currentlyEditing = null;
 
@@ -140,11 +141,13 @@ let tasks = JSON.parse(localStorage.getItem('tasks')) || [];
 
         function toggleDarkMode() {
             document.body.classList.toggle('dark-mode');
+            const isDarkMode = document.body.classList.contains('dark-mode');
+            localStorage.setItem('darkMode', isDarkMode);
+        
             const moon = document.getElementById('moon-icon');
             const sun = document.getElementById('sun-icon');
             [moon.style.display, sun.style.display] =
-                document.body.classList.contains('dark-mode') ?
-                    ['none', 'block'] : ['block', 'none'];
+                isDarkMode ? ['none', 'block'] : ['block', 'none'];
         }
 
         function handleTaskClick(event, taskId) {
@@ -163,6 +166,15 @@ let tasks = JSON.parse(localStorage.getItem('tasks')) || [];
                 finishEdit(currentlyEditing);
             }
         });
+
+        // Initialize dark mode from localStorage
+const savedDarkMode = localStorage.getItem('darkMode') === 'true';
+if (savedDarkMode) {
+    document.body.classList.add('dark-mode');
+    document.getElementById('moon-icon').style.display = 'none';
+    document.getElementById('sun-icon').style.display = 'block';
+}
+
 
         renderTasks();
         updateProgress();
